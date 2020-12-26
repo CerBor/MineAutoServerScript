@@ -1,0 +1,4 @@
+﻿*.DS_STORE
+*.spec
+build/
+__pycache__/
