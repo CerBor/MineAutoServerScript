@@ -2,3 +2,5 @@
 *.spec
 build/
 __pycache__/
+*bat
+!build.bat
