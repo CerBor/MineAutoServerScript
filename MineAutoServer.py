@@ -90,7 +90,7 @@ try:
 
     def checkMaxPlayers():
         """
-        Check max players, is it very big or very small or it isn't int
+        Check max players value, is it very big or very small or it isn't int
         """
         global maxPlayers, maxPlayersValue
 
@@ -204,7 +204,7 @@ try:
 
     def checkLicense():
         """
-        Check license, is it True or False or null string
+        Check license value, is it yes or no or null string
         """
         global isLicense, isLicenseValue, properties_value, haveColorama
         
@@ -218,12 +218,12 @@ try:
                 isLicense = input("- ")
                 checkLicense()
         except ValueError:
-            if (isLicense.lower() == "yes" or fuzz.ratio('yes', isLicense) > 80):
+            if (isLicense.lower() == "yes" or fuzz.ratio('yes', isLicense.lower()) > 80):
                 isLicenseValue = True
                 if (haveColorama):
                     sys.stdout.write (Fore.LIGHTGREEN_EX + "Now players must have license to join your server" + Fore.RESET)
                 else:
-                    sys.stdout.write ("Noew players must have license to join your server")
+                    sys.stdout.write ("Now players must have license to join your server")
 
                 # Change online-mode value
                 for index, item in enumerate(properties_value, start=0):
@@ -234,7 +234,7 @@ try:
                 with open('server.properties', 'w') as write:
                     write.writelines(properties_value)
 
-            elif (isLicense.lower() == "no" or fuzz.ratio('no', isLicense) > 80):
+            elif (isLicense.lower() == "no" or fuzz.ratio('no', isLicense.lower()) > 80):
                 isLicenseValue = False
                 if (haveColorama):
                     sys.stdout.write (Fore.LIGHTRED_EX + "Now players don't need to have license to join your server" + Fore.RESET)
@@ -276,7 +276,7 @@ try:
 
     def checkDescription():
         """
-        Check description, and if it's null or idk set it to default motd
+        Check description value, and if it's null or idk set it to default motd
         """
         global motd, motd_value, haveColorama
 
@@ -376,16 +376,16 @@ try:
 
     def checkDifficulty():
         """
-        Check difficulty, is it peaceful, easy, normal, hard or hardcore
+        Check difficulty value, is it peaceful, easy, normal, hard or hardcore
         """
         global difficulty, difficulty_value, haveColorama
 
         if (difficulty.lower() == "peaceful" or fuzz.ratio("peaceful", difficulty.lower()) > 80):
             difficulty_value = "peaceful"
             if (haveColorama):
-                print ("Difficulty set to " + Fore.LIGHTGREEN_EX + "peaceful" + Fore.RESET)
+                sys.stdout.write ("Difficulty set to " + Fore.LIGHTGREEN_EX + "peaceful" + Fore.RESET)
             else:
-                print ("Difficulty set to peaceful")
+                sys.stdout.write ("Difficulty set to peaceful")
 
             # Change difficulty value
             for index, item in enumerate(properties_value, start=0):
@@ -400,9 +400,9 @@ try:
         elif (difficulty == "" or difficulty.lower() == "easy" or fuzz.ratio("easy", difficulty.lower()) > 80):
             difficulty_value = "easy"
             if (haveColorama):
-                print ("Difficulty set to " + Fore.GREEN + "easy" + Fore.RESET)
+                sys.stdout.write ("Difficulty set to " + Fore.GREEN + "easy" + Fore.RESET)
             else:
-                print ("Difficulty set to easy")
+                sys.stdout.write ("Difficulty set to easy")
 
             # Change difficulty value
             for index, item in enumerate(properties_value, start=0):
@@ -417,9 +417,9 @@ try:
         elif (difficulty.lower() == "normal" or fuzz.ratio("normal", difficulty.lower()) > 80):
             difficulty_value = "normal"
             if (haveColorama):
-                print ("Difficulty set to " + Fore.YELLOW + "normal" + Fore.RESET)
+                sys.stdout.write ("Difficulty set to " + Fore.YELLOW + "normal" + Fore.RESET)
             else:
-                print ("Difficulty set to normal")
+                sys.stdout.write ("Difficulty set to normal")
 
             # Change difficulty value
             for index, item in enumerate(properties_value, start=0):
@@ -434,9 +434,9 @@ try:
         elif (difficulty.lower() == "hard" or fuzz.ratio("hard", difficulty.lower()) > 80):
             difficulty_value = "hard"
             if (haveColorama):
-                print ("Difficulty set to " + Style.DIM + Fore.YELLOW + "hard" + Style.RESET_ALL)
+                sys.stdout.write ("Difficulty set to " + Style.DIM + Fore.YELLOW + "hard" + Style.RESET_ALL)
             else:
-                print ("Difficulty set to hard")
+                sys.stdout.write ("Difficulty set to hard")
 
             # Change difficulty value
             for index, item in enumerate(properties_value, start=0):
@@ -451,9 +451,9 @@ try:
         elif (difficulty.lower() == "hardcore" or fuzz.ratio("hardcore", difficulty.lower()) > 80):
             difficulty_value = "hardcore"
             if (haveColorama):
-                print ("Difficulty set to " + Fore.RED + "hardcore" + Fore.RESET)
+                sys.stdout.write ("Difficulty set to " + Fore.RED + "hardcore" + Fore.RESET)
             else:
-                print ("Difficulty set to hardcore")
+                sys.stdout.write ("Difficulty set to hardcore")
 
             # Change difficulty value
             for index, item in enumerate(properties_value, start=0):
@@ -471,6 +471,78 @@ try:
             
             difficulty = input ("\n- ")
             checkDifficulty()
+
+    def checkCommandBlocks():
+        """
+        Check command blocks value, is it yes or no or null string
+        """
+        global commandBlocks, commandBlocksValue, properties_value
+
+        try:
+            if int(commandBlocks):
+                if (haveColorama):
+                    print (Fore.RED + "Please, write yes or no" + Fore.RESET)
+                else:
+                    print ("Please, write yes or no")
+                commandBlocks = input("- ")
+                checkCommandBlocks()
+        except ValueError:
+            if (commandBlocks.lower() == "yes" or fuzz.ratio('yes', commandBlocks.lower()) > 80):
+                commandBlocksValue = True
+                if (haveColorama):
+                    sys.stdout.write (Fore.LIGHTGREEN_EX + "Command blocks enabled!" + Fore.RESET)
+                else:
+                    sys.stdout.write ("Command blocks enabled!")
+
+                # Change enable-command-block value
+                for index, item in enumerate(properties_value, start=0):
+                    if (item.startswith('enable-command-block')):
+                        properties_value[index] = "enable-command-block=true\n"
+
+                # And apply changes to file
+                with open('server.properties', 'w') as write:
+                    write.writelines(properties_value)
+
+            elif (commandBlocks.lower() == "no" or fuzz.ratio('no', commandBlocks.lower()) > 80):
+                commandBlocksValue = False
+                if (haveColorama):
+                    sys.stdout.write (Fore.LIGHTRED_EX + "Command blocks disabled!" + Fore.RESET)
+                else:
+                    sys.stdout.write ("Command blocks disabled!")
+
+                # Change enable-command-block value
+                for index, item in enumerate(properties_value, start=0):
+                    if (item.startswith('enable-command-block')):
+                        properties_value[index] = "enable-command-block=false\n"
+
+                # And apply changes to file
+                with open('server.properties', 'w') as write:
+                    write.writelines(properties_value)
+
+            elif (commandBlocks == ""):
+                commandBlocksValue = False
+                if (haveColorama):
+                    sys.stdout.write (Fore.LIGHTRED_EX + "Command blocks disabled!" + Fore.RESET)
+                else:
+                    sys.stdout.write ("Command blocks disabled!")
+
+                # Change enable-command-block value
+                for index, item in enumerate(properties_value, start=0):
+                    if (item.startswith('enable-command-block')):
+                        properties_value[index] = "enable-command-block=false\n"
+
+                # And apply changes to file
+                with open('server.properties', 'w') as write:
+                    write.writelines(properties_value)
+
+            else:
+                if (haveColorama):
+                    sys.stdout.write (Fore.RED + "Please, write yes or no" + Fore.RESET)
+                else:
+                    sys.stdout.write ("Please, write yes or no")
+
+                commandBlocks = input ("\n- ")
+                checkCommandBlocks()
 
     def createServerStartFile():
         """
@@ -533,11 +605,21 @@ try:
     printBr()
 
     if (haveColorama):
-        difficulty = input ("And what difficulty are you want to be on your server ({peaceful}peaceful{reset}, {easy}easy{reset}, {normal}normal{reset}, {hard}hard{reset} or {hardcore}hardcore{reset})?\n- ".format(peaceful=Fore.LIGHTGREEN_EX, easy=Fore.GREEN, normal=Fore.YELLOW, hard=Style.DIM + Fore.YELLOW, hardcore=Fore.RED, reset=Style.RESET_ALL))
+        difficulty = input ("What difficulty are you want to be on your server ({peaceful}peaceful{reset}, {easy}easy{reset}, {normal}normal{reset}, {hard}hard{reset} or {hardcore}hardcore{reset})?\n- ".format(peaceful=Fore.LIGHTGREEN_EX, easy=Fore.GREEN, normal=Fore.YELLOW, hard=Style.DIM + Fore.YELLOW, hardcore=Fore.RED, reset=Style.RESET_ALL))
     else:
-        difficulty = input ("And what difficulty are you want to be on your server (peaceful, easy, normal, hard or hardcore)?\n- ")
+        difficulty = input ("What difficulty are you want to be on your server (peaceful, easy, normal, hard or hardcore)?\n- ")
     difficulty_value: str = difficulty
     checkDifficulty()
+
+    sleep (0.5)
+    printBr()
+
+    if (haveColorama):
+        commandBlocks = input ("And do you want to use " + Fore.YELLOW + "command blocks" + Fore.RESET + " on your server?\nyes, no - ")
+    else:
+        commandBlocks = input ("And do you want to use command blocks on your server?\nyes, no - ")
+    commandBlocksValue: bool
+    checkCommandBlocks()
 
     sleep (0.5)
     printBr()
